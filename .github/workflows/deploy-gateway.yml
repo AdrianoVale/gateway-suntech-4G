@@ -52,7 +52,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "./dist/*"
+          source: "dist/*"
           target: "/tmp/gateway-deploy"
           strip_components: 1
 
@@ -69,7 +69,7 @@ jobs:
 
             # 1. Para o serviço em execução com segurança
             echo "Parando o serviço gateway-sunteh..."
-            sudo systemctl stop gateway-sunteh
+            sudo systemctl stop gateway-sunteh || true
 
             # 2. Limpeza Inteligente: Deleta tudo, EXCETO a pasta /cache e seu conteúdo
             echo "Limpando arquivos antigos (preservando pasta cache)..."
@@ -79,8 +79,9 @@ jobs:
             echo "Copiando novos binários..."
             sudo cp -r /tmp/gateway-deploy/* /opt/gateway-sunteh/
 
-            # 4. Garante que se a nova compilação trouxe uma pasta 'cache' vazia, ela não sobrescreva a existente
-            # (O 'cp -r' mescla diretórios, mas esta etapa reforça o isolamento)
+            # 4. GERAÇÃO DA PASTA DE LOG (Evita erro 226/NAMESPACE do systemd)
+            echo "Garantindo a existência da pasta de logs para o sandbox do systemd..."
+            sudo mkdir -p /opt/gateway-sunteh/log
 
             # 5. Ajusta as permissões de todo o diretório para o usuário da aplicação
             echo "Ajustando permissões para blt_aplicacao..."
