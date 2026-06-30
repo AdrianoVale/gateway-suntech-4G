@@ -1,0 +1,101 @@
+name: Deploy Gateway Sunteh
+
+on:
+  push:
+    branches:
+      - production
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-gateway-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Validar Implementação (.NET 8)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Validar Compilação e Sintaxe
+        run: dotnet build -c Release
+
+  deploy:
+    name: Deploy via SCP & SSH
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publicar Binários Otimizados para Linux
+        run: |
+          dotnet publish -c Release -r linux-x64 --self-contained false -o ./dist
+
+      - name: Transferir arquivos compilados (SCP)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "./dist/*"
+          target: "/tmp/gateway-deploy"
+          strip_components: 1
+
+      - name: Atualizar e Reiniciar Serviço (SSH)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -euo pipefail
+            echo "=== Iniciando Deploy do Gateway Sunteh (Preservando Cache) ==="
+
+            # 1. Para o serviço em execução com segurança
+            echo "Parando o serviço gateway-sunteh..."
+            sudo systemctl stop gateway-sunteh
+
+            # 2. Limpeza Inteligente: Deleta tudo, EXCETO a pasta /cache e seu conteúdo
+            echo "Limpando arquivos antigos (preservando pasta cache)..."
+            sudo find /opt/gateway-sunteh -mindepth 1 -not -path '/opt/gateway-sunteh/cache*' -delete
+
+            # 3. Copia os novos binários do diretório temporário do SCP
+            echo "Copiando novos binários..."
+            sudo cp -r /tmp/gateway-deploy/* /opt/gateway-sunteh/
+
+            # 4. Garante que se a nova compilação trouxe uma pasta 'cache' vazia, ela não sobrescreva a existente
+            # (O 'cp -r' mescla diretórios, mas esta etapa reforça o isolamento)
+
+            # 5. Ajusta as permissões de todo o diretório para o usuário da aplicação
+            echo "Ajustando permissões para blt_aplicacao..."
+            sudo chown -R blt_aplicacao:blt_aplicacao /opt/gateway-sunteh
+            sudo find /opt/gateway-sunteh -type d -exec chmod 755 {} \;
+            sudo find /opt/gateway-sunteh -type f -exec chmod 644 {} \;
+
+            # 6. Reinicia o daemon do systemd e o serviço
+            echo "Iniciando o serviço gateway-sunteh..."
+            sudo systemctl daemon-reload
+            sudo systemctl start gateway-sunteh
+
+            # 7. Aguarda a inicialização e exibe os logs
+            sleep 3
+            echo "=== Últimos logs do serviço ==="
+            sudo journalctl -u gateway-sunteh --no-pager -n 25
+
+            echo "=== Deploy do Gateway concluído com sucesso ==="
