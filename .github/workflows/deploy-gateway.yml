@@ -67,26 +67,27 @@ jobs:
             set -euo pipefail
             echo "=== Iniciando Deploy do Gateway Sunteh (Preservando Cache) ==="
 
-            # 1. Tenta parar o serviço usando o sudo sem interatividade (-n)
-            # Se falhar por falta de permissão, o "|| true" garante que o script continue
+            # 1. Para o serviço com segurança
             echo "Parando o serviço gateway-sunteh..."
             sudo -n systemctl stop gateway-sunteh || true
 
-            # 2. Executa a limpeza usando o sudo explicitamente com a flag de não-interativo
+            # 2. Limpeza mantendo a pasta cache
             echo "Limpando arquivos antigos (preservando pasta cache)..."
             sudo -n find /opt/gateway-sunteh -mindepth 1 -not -path '/opt/gateway-sunteh/cache*' -delete
 
-            # 3. Copia os novos binários do diretório temporário
+            # 3. Copia exatamente como mapeado no sudoers
             echo "Copiando novos binários..."
             sudo -n cp -r /tmp/gateway-deploy/* /opt/gateway-sunteh/
 
-            # 4. Cria a pasta de log exigida pelo isolation/sandboxing do systemd
+            # 4. Criação da pasta de log (agora liberada no sudoers)
             echo "Garantindo a existência da pasta de logs..."
             sudo -n mkdir -p /opt/gateway-sunteh/log
 
-            # 5. Ajusta as permissões de todo o diretório para o usuário da aplicação
+            # 5. Ajusta o dono do diretório mapeado com escape no sudoers
             echo "Ajustando permissões para blt_aplicacao..."
             sudo -n chown -R blt_aplicacao:blt_aplicacao /opt/gateway-sunteh
+            
+            # Executa o chmod usando o find (que já está liberado via curinga '*' no sudoers)
             sudo -n find /opt/gateway-sunteh -type d -exec chmod 755 {} \;
             sudo -n find /opt/gateway-sunteh -type f -exec chmod 644 {} \;
 
