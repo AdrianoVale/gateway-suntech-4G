@@ -1,0 +1,16 @@
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\GatewaySunteh4G-NET8.exe
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\appsettings.Development.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\appsettings.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\GatewaySunteh4G-NET8.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\GatewaySunteh4G-NET8.deps.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\GatewaySunteh4G-NET8.runtimeconfig.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\GatewaySunteh4G-NET8.pdb
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\Microsoft.IdentityModel.Logging.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\Microsoft.IdentityModel.Protocols.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\Microsoft.IdentityModel.Tokens.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\Npgsql.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-prod\System.IdentityModel.Tokens.Jwt.dll

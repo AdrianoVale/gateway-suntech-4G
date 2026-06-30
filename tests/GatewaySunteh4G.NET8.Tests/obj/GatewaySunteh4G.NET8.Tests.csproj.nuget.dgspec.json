@@ -1,0 +1,155 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\tests\\GatewaySunteh4G.NET8.Tests\\GatewaySunteh4G.NET8.Tests.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\GatewaySunteh4G-NET8.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\GatewaySunteh4G-NET8.csproj",
+        "projectName": "GatewaySunteh4G-NET8",
+        "projectPath": "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\GatewaySunteh4G-NET8.csproj",
+        "packagesPath": "C:\\Users\\torresVale\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\torresVale\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[8.0.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.420/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\tests\\GatewaySunteh4G.NET8.Tests\\GatewaySunteh4G.NET8.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\tests\\GatewaySunteh4G.NET8.Tests\\GatewaySunteh4G.NET8.Tests.csproj",
+        "projectName": "GatewaySunteh4G.NET8.Tests",
+        "projectPath": "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\tests\\GatewaySunteh4G.NET8.Tests\\GatewaySunteh4G.NET8.Tests.csproj",
+        "packagesPath": "C:\\Users\\torresVale\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\tests\\GatewaySunteh4G.NET8.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\torresVale\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\GatewaySunteh4G-NET8.csproj": {
+                "projectPath": "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\GatewaySunteh4G-NET8.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.11.1, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.9.2, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.8.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.420/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

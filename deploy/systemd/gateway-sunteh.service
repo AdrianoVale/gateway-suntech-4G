@@ -1,0 +1,40 @@
+[Unit]
+Description=Gateway Sunteh 4G (.NET 8)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=blt_aplicacao
+Group=blt_aplicacao
+WorkingDirectory=/opt/gateway-sunteh
+ExecStart=/usr/bin/dotnet /opt/gateway-sunteh/GatewaySunteh4G-NET8.dll
+EnvironmentFile=-/etc/default/gateway-sunteh
+
+# Restart automatico para resiliencia em producao
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=10
+
+# Encerramento gracioso
+TimeoutStopSec=30
+KillSignal=SIGINT
+
+# Hardening basico recomendado
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/gateway-sunteh/log /opt/gateway-sunteh/log/cache /opt/gateway-sunteh/log/arquivados
+
+# Limites operacionais
+LimitNOFILE=65535
+
+# Logs no journal (alem do log em arquivo da app)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gateway-sunteh
+
+[Install]
+WantedBy=multi-user.target

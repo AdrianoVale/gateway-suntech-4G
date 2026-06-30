@@ -1,0 +1,6 @@
+2026-05-18 16:01:46.606 -03:00 [Information] GatewaySunteh4G_NET8.Workers.UdpGatewayWorker: Receiver UDP iniciado na porta 19060 com buffer 4194304 e 16 workers
+2026-05-18 16:01:46.652 -03:00 [Information] GatewaySunteh4G_NET8.Workers.ReplayWorker: ReplayWorker iniciado. Verificando cache em disco...
+2026-05-18 16:01:46.744 -03:00 [Information] Microsoft.Hosting.Lifetime (14): Now listening on: http://0.0.0.0:19064
+2026-05-18 16:01:46.744 -03:00 [Information] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-05-18 16:01:46.744 -03:00 [Information] Microsoft.Hosting.Lifetime: Hosting environment: Production
+2026-05-18 16:01:46.745 -03:00 [Information] Microsoft.Hosting.Lifetime: Content root path: C:\Users\torresVale\Documents\GatewaySunteh4G-NET8

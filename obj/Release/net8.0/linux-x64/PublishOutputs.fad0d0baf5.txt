@@ -1,0 +1,8 @@
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-linux\GatewaySunteh4G-NET8
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-linux\appsettings.Development.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-linux\appsettings.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-linux\GatewaySunteh4G-NET8.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-linux\GatewaySunteh4G-NET8.deps.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-linux\GatewaySunteh4G-NET8.runtimeconfig.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-linux\GatewaySunteh4G-NET8.pdb
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\bin\publish-linux\Npgsql.dll
