@@ -111,8 +111,16 @@ jobs:
             echo "=== Preflight de dependências e permissões ==="
             command -v dotnet >/dev/null
             command -v curl >/dev/null
-            sudo -n true
-            sh -c "$AS_APP true"
+            sudo -n /usr/bin/systemctl --version >/dev/null
+            sudo -n /usr/bin/journalctl --version >/dev/null
+            sudo -n /usr/bin/chown --version >/dev/null
+            sudo -n /usr/bin/cp --version >/dev/null
+            sudo -n /usr/bin/find /tmp -maxdepth 0 >/dev/null
+            sudo -n /usr/bin/rm -f /tmp/gateway-sudo-check-nonexistent
+            sh -c "$AS_APP /usr/bin/mkdir --version >/dev/null"
+            sh -c "$AS_APP /usr/bin/tar --version >/dev/null"
+            sh -c "$AS_APP /usr/bin/find /tmp -maxdepth 0 >/dev/null"
+            sh -c "$AS_APP /usr/bin/rm -f /tmp/gateway-app-sudo-check-nonexistent"
 
             if [ ! -d "$RUN_TMP" ]; then
               fail_with_logs "Diretório temporário de deploy não encontrado: $RUN_TMP"
