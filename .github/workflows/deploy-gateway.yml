@@ -70,7 +70,9 @@ jobs:
             DEPLOY_ID="$(date +%Y%m%d%H%M%S)-${{ github.run_number }}"
             BACKUP_FILE="$BACKUPS_DIR/deploy-$DEPLOY_ID.tgz"
             KEEP_BACKUPS="${KEEP_BACKUPS:-12}"
-            AS_APP='sudo -n -u blt_aplicacao --'
+            as_app() {
+              sudo -n -u blt_aplicacao -- sh -c "cd / && $1"
+            }
 
             CAN_ROLLBACK="false"
 
@@ -117,10 +119,10 @@ jobs:
             sudo -n /usr/bin/cp --version >/dev/null
             sudo -n /usr/bin/find /tmp -maxdepth 0 >/dev/null
             sudo -n /usr/bin/rm -f /tmp/gateway-sudo-check-nonexistent
-            sh -c "$AS_APP /usr/bin/mkdir --version >/dev/null"
-            sh -c "$AS_APP /usr/bin/tar --version >/dev/null"
-            sh -c "$AS_APP /usr/bin/find /tmp -maxdepth 0 >/dev/null"
-            sh -c "$AS_APP /usr/bin/rm -f /tmp/gateway-app-sudo-check-nonexistent"
+            as_app '/usr/bin/mkdir --version >/dev/null'
+            as_app '/usr/bin/tar --version >/dev/null'
+            as_app '/usr/bin/find /tmp -maxdepth 0 >/dev/null'
+            as_app '/usr/bin/rm -f /tmp/gateway-app-sudo-check-nonexistent'
 
             if [ ! -d "$RUN_TMP" ]; then
               fail_with_logs "Diretório temporário de deploy não encontrado: $RUN_TMP"
@@ -142,10 +144,10 @@ jobs:
 
             echo "=== Preparando backup e estado persistente ==="
             sudo -n chown -R blt_aplicacao:blt_aplicacao "$APP_ROOT"
-            sh -c "$AS_APP mkdir -p '$BACKUPS_DIR' '$APP_ROOT/log/cache' '$APP_ROOT/log/arquivados'"
+            as_app "mkdir -p '$BACKUPS_DIR' '$APP_ROOT/log/cache' '$APP_ROOT/log/arquivados'"
 
             echo "=== Gerando backup antes da atualização ==="
-            sh -c "$AS_APP tar -C '$APP_ROOT' --exclude='backups' -czf '$BACKUP_FILE' ."
+            as_app "tar -C '$APP_ROOT' --exclude='backups' -czf '$BACKUP_FILE' ."
             CAN_ROLLBACK="true"
 
             echo "=== Parando serviço e aplicando nova versão ==="
@@ -155,8 +157,8 @@ jobs:
               -not -path "$BACKUPS_DIR" -not -path "$BACKUPS_DIR/*" -delete
             sudo -n cp -a "$RUN_TMP"/. "$APP_ROOT"/
             sudo -n chown -R blt_aplicacao:blt_aplicacao "$APP_ROOT"
-            sh -c "$AS_APP find '$APP_ROOT' -type d -exec chmod 755 {} \\;"
-            sh -c "$AS_APP find '$APP_ROOT' -type f -exec chmod 644 {} \\;"
+            as_app "find '$APP_ROOT' -type d -exec chmod 755 {} \\;"
+            as_app "find '$APP_ROOT' -type f -exec chmod 644 {} \\;"
 
             echo "=== Reiniciando serviço ==="
             sudo -n systemctl daemon-reload
@@ -182,13 +184,13 @@ jobs:
 
             echo "=== Retenção de backups ==="
             BACKUP_INDEX=0
-            for BKP in $(sh -c "$AS_APP ls -1t '$BACKUPS_DIR'/deploy-*.tgz 2>/dev/null" || true); do
+            for BKP in $(as_app "ls -1t '$BACKUPS_DIR'/deploy-*.tgz 2>/dev/null" || true); do
               BACKUP_INDEX=$((BACKUP_INDEX + 1))
               if [ "$BACKUP_INDEX" -le "$KEEP_BACKUPS" ]; then
                 continue
               fi
               echo "Removendo backup antigo: $BKP"
-              sh -c "$AS_APP rm -f '$BKP'"
+              as_app "rm -f '$BKP'"
             done
 
             echo "=== Limpeza do pacote temporário ==="
