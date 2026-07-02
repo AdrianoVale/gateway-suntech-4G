@@ -1,0 +1,205 @@
+2026-07-02 18:03:03.205 -03:00 [Information] Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager (63): User profile is available. Using 'C:\Users\torresVale\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-07-02 18:03:03.368 -03:00 [Information] Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager (58): Creating key {d8ad8e44-3c23-4913-ba7b-9ab526484f72} with creation date 2026-07-02 21:03:03Z, activation date 2026-07-02 21:03:03Z, and expiration date 2026-09-30 21:03:03Z.
+2026-07-02 18:03:03.407 -03:00 [Information] Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository (39): Writing data to file 'C:\Users\torresVale\AppData\Local\ASP.NET\DataProtection-Keys\key-d8ad8e44-3c23-4913-ba7b-9ab526484f72.xml'.
+2026-07-02 18:03:03.487 -03:00 [Information] GatewaySunteh4G_NET8.Workers.UdpGatewayWorker: Receiver UDP iniciado na porta 9040 com buffer 4194304 e 16 workers
+2026-07-02 18:03:03.503 -03:00 [Information] GatewaySunteh4G_NET8.Workers.ReplayWorker: ReplayWorker iniciado. Verificando cache em disco...
+2026-07-02 18:03:03.694 -03:00 [Information] Microsoft.Hosting.Lifetime (14): Now listening on: http://0.0.0.0:9054
+2026-07-02 18:03:03.694 -03:00 [Information] Microsoft.Hosting.Lifetime (14): Now listening on: http://127.0.0.1:9055
+2026-07-02 18:03:03.694 -03:00 [Information] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-02 18:03:03.694 -03:00 [Information] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2026-07-02 18:03:03.694 -03:00 [Information] Microsoft.Hosting.Lifetime: Content root path: C:\Users\torresVale\Documents\GatewaySunteh4G-NET8
+2026-07-02 18:03:08.743 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/healthz - - -
+2026-07-02 18:03:08.820 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint 'HTTP: GET /healthz'
+2026-07-02 18:03:08.828 -03:00 [Information] Microsoft.AspNetCore.Http.Result.OkObjectResult (1): Setting HTTP status code 200.
+2026-07-02 18:03:08.838 -03:00 [Information] Microsoft.AspNetCore.Http.Result.OkObjectResult (3): Writing value of type '<>f__AnonymousType0`2' as Json.
+2026-07-02 18:03:08.850 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint 'HTTP: GET /healthz'
+2026-07-02 18:03:08.852 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 GET http://127.0.0.1:9055/healthz - 200 - application/json;+charset=utf-8 111.1466ms
+2026-07-02 18:03:55.033 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - application/x-www-form-urlencoded 0
+2026-07-02 18:03:55.042 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:03:55.047 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:03:55.047 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 13.8778ms
+2026-07-02 18:05:40.162 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - application/x-www-form-urlencoded 0
+2026-07-02 18:05:40.164 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:05:40.164 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:05:40.164 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 2.5608ms
+2026-07-02 18:06:41.004 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1&access_token=foo - application/x-www-form-urlencoded 0
+2026-07-02 18:06:41.028 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (1): Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+ ---> Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+   --- End of inner exception stack trace ---
+2026-07-02 18:06:41.031 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (7): Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-07-02 18:06:41.032 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:06:41.033 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:06:41.034 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1&access_token=foo - 401 0 - 29.7011ms
+2026-07-02 18:11:46.534 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1&access_token=foo - application/x-www-form-urlencoded 0
+2026-07-02 18:11:46.535 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (1): Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+ ---> Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+   --- End of inner exception stack trace ---
+2026-07-02 18:11:46.535 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (7): Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-07-02 18:11:46.536 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:11:46.536 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:11:46.536 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1&access_token=foo - 401 0 - 2.5391ms
+2026-07-02 18:13:26.007 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1&access_token=foo - - -
+2026-07-02 18:13:26.008 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (1): Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+ ---> Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+   --- End of inner exception stack trace ---
+2026-07-02 18:13:26.008 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (7): Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2026-07-02 18:13:26.008 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:13:26.008 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:13:26.008 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1&access_token=foo - 401 0 - 0.9174ms
+2026-07-02 18:33:32.818 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 18:33:32.822 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:33:32.822 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:33:32.823 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 6.1145ms
+2026-07-02 18:37:52.792 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 18:37:52.793 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:37:52.793 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:37:52.793 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 1.1859ms
+2026-07-02 18:39:12.036 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://localhost/hub/posicoes - - -
+2026-07-02 18:39:12.043 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:39:12.043 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:39:12.043 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 GET http://localhost/hub/posicoes - 401 0 - 6.7008ms
+2026-07-02 18:39:45.662 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 18:39:45.663 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:39:45.663 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:39:45.663 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 1.4279ms
+2026-07-02 18:44:24.152 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 18:44:24.153 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:44:24.153 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:44:24.154 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 1.2296ms
+2026-07-02 18:44:53.308 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 18:44:53.310 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:44:53.310 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:44:53.310 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 2.1530ms
+2026-07-02 18:47:46.875 -03:00 [Information] GatewaySunteh4G_NET8.Workers.UdpGatewayWorker: Receiver UDP iniciado na porta 9040 com buffer 4194304 e 16 workers
+2026-07-02 18:47:46.886 -03:00 [Information] GatewaySunteh4G_NET8.Workers.ReplayWorker: ReplayWorker iniciado. Verificando cache em disco...
+2026-07-02 18:47:47.173 -03:00 [Information] Microsoft.Hosting.Lifetime (14): Now listening on: http://0.0.0.0:9054
+2026-07-02 18:47:47.174 -03:00 [Information] Microsoft.Hosting.Lifetime (14): Now listening on: http://127.0.0.1:9055
+2026-07-02 18:47:47.174 -03:00 [Information] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-02 18:47:47.174 -03:00 [Information] Microsoft.Hosting.Lifetime: Hosting environment: Production
+2026-07-02 18:47:47.174 -03:00 [Information] Microsoft.Hosting.Lifetime: Content root path: C:\Users\torresVale\Documents\GatewaySunteh4G-NET8
+2026-07-02 18:48:36.978 -03:00 [Information] Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager (63): User profile is available. Using 'C:\Users\torresVale\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-07-02 18:48:37.039 -03:00 [Information] GatewaySunteh4G_NET8.Workers.UdpGatewayWorker: Receiver UDP iniciado na porta 9040 com buffer 4194304 e 16 workers
+2026-07-02 18:48:37.049 -03:00 [Information] GatewaySunteh4G_NET8.Workers.ReplayWorker: ReplayWorker iniciado. Verificando cache em disco...
+2026-07-02 18:48:37.170 -03:00 [Information] Microsoft.Hosting.Lifetime (14): Now listening on: http://0.0.0.0:9054
+2026-07-02 18:48:37.170 -03:00 [Information] Microsoft.Hosting.Lifetime (14): Now listening on: http://127.0.0.1:9055
+2026-07-02 18:48:37.170 -03:00 [Information] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2026-07-02 18:48:37.171 -03:00 [Information] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2026-07-02 18:48:37.171 -03:00 [Information] Microsoft.Hosting.Lifetime: Content root path: C:\Users\torresVale\Documents\GatewaySunteh4G-NET8
+2026-07-02 18:48:55.992 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 18:48:56.039 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 18:48:56.048 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 204 - - 57.9474ms
+2026-07-02 18:48:56.811 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - application/json -
+2026-07-02 18:48:56.812 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 18:48:56.851 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 18:48:56.854 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 18:48:56.856 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 44.3268ms
+2026-07-02 18:49:43.798 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 18:49:43.800 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 18:49:43.800 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 204 - - 1.8816ms
+2026-07-02 18:49:43.823 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - 0
+2026-07-02 18:49:43.824 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 18:49:43.954 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes/negotiate'
+2026-07-02 18:49:43.980 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint '/hub/posicoes/negotiate'
+2026-07-02 18:49:43.981 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 200 316 application/json 157.3149ms
+2026-07-02 18:49:43.988 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes?id=BNZqVUfS-0sOt5X2L674_w&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NTMiLCJjaWQiOiIxMCIsImlzcyI6ImJsdC1waHAiLCJhdWQiOiJnYXRld2F5LXBvcyIsImlhdCI6MTc4MzAyODk4MywiZXhwIjoxNzgzMDMyNTgzfQ.9lRWimsabFl5p0jJ3Gi0jyt4bV4YPM0osA-yaN25h2E - - -
+2026-07-02 18:49:43.988 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 18:49:43.991 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes'
+2026-07-02 18:49:44.213 -03:00 [Information] GatewaySunteh4G_NET8.Hubs.PositionHub: Hub: conectado userId=953 clientId=10 veiculos=1 conn=uUDtCJhrWqoSsQP3TdfP8g
+2026-07-02 18:54:46.548 -03:00 [Information] GatewaySunteh4G_NET8.Hubs.PositionHub: Hub: desconectado conn=uUDtCJhrWqoSsQP3TdfP8g
+2026-07-02 18:54:46.550 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint '/hub/posicoes'
+2026-07-02 18:54:46.552 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes?id=BNZqVUfS-0sOt5X2L674_w&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NTMiLCJjaWQiOiIxMCIsImlzcyI6ImJsdC1waHAiLCJhdWQiOiJnYXRld2F5LXBvcyIsImlhdCI6MTc4MzAyODk4MywiZXhwIjoxNzgzMDMyNTgzfQ.9lRWimsabFl5p0jJ3Gi0jyt4bV4YPM0osA-yaN25h2E - 101 - - 302564.2484ms
+2026-07-02 18:54:47.569 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 18:54:47.570 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 18:54:47.570 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 204 - - 0.5310ms
+2026-07-02 18:54:47.573 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - 0
+2026-07-02 18:54:47.573 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 18:54:47.574 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes/negotiate'
+2026-07-02 18:54:47.575 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint '/hub/posicoes/negotiate'
+2026-07-02 18:54:47.576 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 200 316 application/json 2.4351ms
+2026-07-02 18:54:47.654 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes?id=4MRVSHfb-vkTWiIwtL3iJw&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NTMiLCJjaWQiOiIxMCIsImlzcyI6ImJsdC1waHAiLCJhdWQiOiJnYXRld2F5LXBvcyIsImlhdCI6MTc4MzAyOTI4NiwiZXhwIjoxNzgzMDMyODg2fQ.5sIs_wnWrYinVz-BpEK9qaWgM7_GEFeU59AphSpe008 - - -
+2026-07-02 18:54:47.654 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 18:54:47.655 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes'
+2026-07-02 18:54:47.773 -03:00 [Information] GatewaySunteh4G_NET8.Hubs.PositionHub: Hub: conectado userId=953 clientId=10 veiculos=1 conn=Oj_Mex0KgRvtgG5DV020xA
+2026-07-02 19:00:07.752 -03:00 [Information] GatewaySunteh4G_NET8.Hubs.PositionHub: Hub: desconectado conn=Oj_Mex0KgRvtgG5DV020xA
+2026-07-02 19:00:07.753 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint '/hub/posicoes'
+2026-07-02 19:00:07.753 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes?id=4MRVSHfb-vkTWiIwtL3iJw&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NTMiLCJjaWQiOiIxMCIsImlzcyI6ImJsdC1waHAiLCJhdWQiOiJnYXRld2F5LXBvcyIsImlhdCI6MTc4MzAyOTI4NiwiZXhwIjoxNzgzMDMyODg2fQ.5sIs_wnWrYinVz-BpEK9qaWgM7_GEFeU59AphSpe008 - 101 - - 320099.4959ms
+2026-07-02 19:00:07.939 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 19:00:07.939 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:00:07.940 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 204 - - 0.7880ms
+2026-07-02 19:00:07.943 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - 0
+2026-07-02 19:00:07.944 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:00:07.945 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes/negotiate'
+2026-07-02 19:00:07.946 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint '/hub/posicoes/negotiate'
+2026-07-02 19:00:07.947 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 200 316 application/json 3.4431ms
+2026-07-02 19:00:07.995 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes?id=3XD9pYiahGyGsO7HhD2BBQ&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NTMiLCJjaWQiOiIxMCIsImlzcyI6ImJsdC1waHAiLCJhdWQiOiJnYXRld2F5LXBvcyIsImlhdCI6MTc4MzAyOTYwNywiZXhwIjoxNzgzMDMzMjA3fQ.irc-70siyfjiBNucTHdf1tZRO0tsRhDx9Op3k_Pre38 - - -
+2026-07-02 19:00:07.995 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:00:07.996 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes'
+2026-07-02 19:00:08.117 -03:00 [Information] GatewaySunteh4G_NET8.Hubs.PositionHub: Hub: conectado userId=953 clientId=10 veiculos=1 conn=qQQfHSHRdlduuyE9sHLVDw
+2026-07-02 19:01:35.256 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 19:01:35.256 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:01:35.257 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 204 - - 0.5169ms
+2026-07-02 19:01:35.258 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - 0
+2026-07-02 19:01:35.258 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:01:35.259 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes/negotiate'
+2026-07-02 19:01:35.260 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint '/hub/posicoes/negotiate'
+2026-07-02 19:01:35.260 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 200 316 application/json 1.7648ms
+2026-07-02 19:01:35.326 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes?id=ht6E0tej_mbXUuLKlfJBUA&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NTMiLCJjaWQiOiIxMCIsImlzcyI6ImJsdC1waHAiLCJhdWQiOiJnYXRld2F5LXBvcyIsImlhdCI6MTc4MzAyOTY5NSwiZXhwIjoxNzgzMDMzMjk1fQ.WKkqI6TfpZWqpcwRwztrXKFwVcC3vdKy8qKbG9Dujgc - - -
+2026-07-02 19:01:35.326 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:01:35.328 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes'
+2026-07-02 19:01:35.335 -03:00 [Information] GatewaySunteh4G_NET8.Hubs.PositionHub: Hub: conectado userId=953 clientId=10 veiculos=1 conn=Oir-zZ1fpASmjSuT8mDlLg
+2026-07-02 19:02:21.732 -03:00 [Information] GatewaySunteh4G_NET8.Hubs.PositionHub: Hub: desconectado conn=Oir-zZ1fpASmjSuT8mDlLg
+2026-07-02 19:02:21.732 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint '/hub/posicoes'
+2026-07-02 19:02:21.733 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes?id=ht6E0tej_mbXUuLKlfJBUA&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NTMiLCJjaWQiOiIxMCIsImlzcyI6ImJsdC1waHAiLCJhdWQiOiJnYXRld2F5LXBvcyIsImlhdCI6MTc4MzAyOTY5NSwiZXhwIjoxNzgzMDMzMjk1fQ.WKkqI6TfpZWqpcwRwztrXKFwVcC3vdKy8qKbG9Dujgc - 101 - - 46406.9865ms
+2026-07-02 19:02:21.865 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 19:02:21.865 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:02:21.866 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 OPTIONS http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 204 - - 0.7348ms
+2026-07-02 19:02:21.869 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - 0
+2026-07-02 19:02:21.869 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:02:21.871 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes/negotiate'
+2026-07-02 19:02:21.871 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware (1): Executed endpoint '/hub/posicoes/negotiate'
+2026-07-02 19:02:21.872 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 POST http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 200 316 application/json 2.8925ms
+2026-07-02 19:02:21.974 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes?id=RKpqCIuVpKTH27NNyJqrGg&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NTMiLCJjaWQiOiIxMCIsImlzcyI6ImJsdC1waHAiLCJhdWQiOiJnYXRld2F5LXBvcyIsImlhdCI6MTc4MzAyOTc0MSwiZXhwIjoxNzgzMDMzMzQxfQ.KOrkonVMqwhHjz9TrygbZcm1u6GnmOcF-eLdS22dEUg - - -
+2026-07-02 19:02:21.975 -03:00 [Information] Microsoft.AspNetCore.Cors.Infrastructure.CorsService (4): CORS policy execution successful.
+2026-07-02 19:02:21.975 -03:00 [Information] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint '/hub/posicoes'
+2026-07-02 19:02:21.994 -03:00 [Information] GatewaySunteh4G_NET8.Hubs.PositionHub: Hub: conectado userId=953 clientId=10 veiculos=1 conn=dAgh895gVA8HGXhKvRRXAQ
+2026-07-02 19:07:09.019 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - - -
+2026-07-02 19:07:09.032 -03:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService (2): Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-07-02 19:07:09.045 -03:00 [Information] Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler (12): AuthenticationScheme: Bearer was challenged.
+2026-07-02 19:07:09.045 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 GET http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1 - 401 0 - 26.0023ms
+2026-07-02 19:07:09.665 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/favicon.ico - - -
+2026-07-02 19:07:09.724 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 GET http://127.0.0.1:9055/favicon.ico - 404 0 - 59.5341ms
+2026-07-02 19:07:09.738 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (16): Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://127.0.0.1:9055/favicon.ico, Response status code: 404

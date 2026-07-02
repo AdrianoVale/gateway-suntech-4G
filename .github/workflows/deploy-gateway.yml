@@ -3,7 +3,6 @@ name: Deploy Gateway Sunteh
 on:
   push:
     branches:
-      - production
       - main
   workflow_dispatch:
 
@@ -53,7 +52,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "dist/*"
-          target: "/tmp/gateway-deploy"
+          target: "/tmp/gateway-deploy-${{ github.run_id }}"
           strip_components: 1
 
       - name: Atualizar e Reiniciar Serviço (SSH)
@@ -65,40 +64,128 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             set -euo pipefail
-            echo "=== Iniciando Deploy do Gateway Sunteh (Preservando Cache) ==="
+            APP_ROOT="/opt/gateway-sunteh"
+            RUN_TMP="/tmp/gateway-deploy-${{ github.run_id }}"
+            BACKUPS_DIR="$APP_ROOT/backups"
+            DEPLOY_ID="$(date +%Y%m%d%H%M%S)-${{ github.run_number }}"
+            BACKUP_FILE="$BACKUPS_DIR/deploy-$DEPLOY_ID.tgz"
+            KEEP_BACKUPS="${KEEP_BACKUPS:-12}"
+            AS_APP='sudo -n -u blt_aplicacao --'
 
-            # 1. Para o serviço com segurança
-            echo "Parando o serviço gateway-sunteh..."
+            CAN_ROLLBACK="false"
+
+            fail_with_logs() {
+              echo "[ERRO] $1"
+              echo "=== status gateway-sunteh ==="
+              sudo -n systemctl status gateway-sunteh --no-pager || true
+              echo "=== logs gateway-sunteh ==="
+              sudo -n journalctl -u gateway-sunteh --no-pager -n 80 || true
+              exit 1
+            }
+
+            rollback() {
+              if [ "$CAN_ROLLBACK" = "true" ] && [ -f "$BACKUP_FILE" ]; then
+                echo "[ROLLBACK] Restaurando app a partir de $BACKUP_FILE"
+                sudo -n systemctl stop gateway-sunteh || true
+                sudo -n find "$APP_ROOT" -mindepth 1 \
+                  -not -path "$APP_ROOT/log" -not -path "$APP_ROOT/log/*" \
+                  -not -path "$BACKUPS_DIR" -not -path "$BACKUPS_DIR/*" -delete
+                sh -c "$AS_APP tar -xzf '$BACKUP_FILE' -C '$APP_ROOT'"
+                sudo -n systemctl daemon-reload
+                sudo -n systemctl start gateway-sunteh || true
+              fi
+            }
+
+            on_error() {
+              echo "[ERRO] Falha na linha $1. Iniciando rollback automático..."
+              rollback
+              echo "=== status pós-rollback ==="
+              sudo -n systemctl status gateway-sunteh --no-pager || true
+              echo "=== logs pós-rollback ==="
+              sudo -n journalctl -u gateway-sunteh --no-pager -n 100 || true
+              exit 1
+            }
+
+            trap 'on_error $LINENO' ERR
+
+            echo "=== Preflight de dependências e permissões ==="
+            command -v dotnet >/dev/null
+            command -v curl >/dev/null
+            sudo -n true
+            sh -c "$AS_APP true"
+
+            if [ ! -d "$RUN_TMP" ]; then
+              fail_with_logs "Diretório temporário de deploy não encontrado: $RUN_TMP"
+            fi
+
+            if [ ! -d "$APP_ROOT" ]; then
+              fail_with_logs "Diretório da aplicação não encontrado: $APP_ROOT"
+            fi
+
+            # Protege contra deploy que derruba o Hub por config ausente
+            if [ ! -f /etc/default/gateway-sunteh ]; then
+              fail_with_logs "Arquivo /etc/default/gateway-sunteh não encontrado"
+            fi
+            grep -q '^Gateway__Hub__Enabled=true$' /etc/default/gateway-sunteh
+            grep -q '^Gateway__Hub__Url=http://127.0.0.1:9055$' /etc/default/gateway-sunteh
+            grep -q '^Gateway__Hub__JwtIssuer=blt-php$' /etc/default/gateway-sunteh
+            grep -q '^Gateway__Hub__JwtAudience=gateway-pos$' /etc/default/gateway-sunteh
+            grep -q '^Gateway__Hub__JwtSecret=.\+$' /etc/default/gateway-sunteh
+
+            echo "=== Preparando backup e estado persistente ==="
+            sudo -n chown -R blt_aplicacao:blt_aplicacao "$APP_ROOT"
+            sh -c "$AS_APP mkdir -p '$BACKUPS_DIR' '$APP_ROOT/log/cache' '$APP_ROOT/log/arquivados'"
+
+            echo "=== Gerando backup antes da atualização ==="
+            sh -c "$AS_APP tar -C '$APP_ROOT' --exclude='backups' -czf '$BACKUP_FILE' ."
+            CAN_ROLLBACK="true"
+
+            echo "=== Parando serviço e aplicando nova versão ==="
             sudo -n systemctl stop gateway-sunteh || true
+            sudo -n find "$APP_ROOT" -mindepth 1 \
+              -not -path "$APP_ROOT/log" -not -path "$APP_ROOT/log/*" \
+              -not -path "$BACKUPS_DIR" -not -path "$BACKUPS_DIR/*" -delete
+            sudo -n cp -a "$RUN_TMP"/. "$APP_ROOT"/
+            sudo -n chown -R blt_aplicacao:blt_aplicacao "$APP_ROOT"
+            sh -c "$AS_APP find '$APP_ROOT' -type d -exec chmod 755 {} \\;"
+            sh -c "$AS_APP find '$APP_ROOT' -type f -exec chmod 644 {} \\;"
 
-            # 2. Limpeza mantendo a pasta cache
-            echo "Limpando arquivos antigos (preservando pasta cache)..."
-            sudo -n find /opt/gateway-sunteh -mindepth 1 -not -path '/opt/gateway-sunteh/cache*' -delete
-
-            # 3. Copia exatamente como mapeado no sudoers
-            echo "Copiando novos binários..."
-            sudo -n cp -r /tmp/gateway-deploy/* /opt/gateway-sunteh/
-
-            # 4. Criação da pasta de log (agora liberada no sudoers)
-            echo "Garantindo a existência da pasta de logs..."
-            sudo -n mkdir -p /opt/gateway-sunteh/log
-
-            # 5. Ajusta o dono do diretório mapeado com escape no sudoers
-            echo "Ajustando permissões para blt_aplicacao..."
-            sudo -n chown -R blt_aplicacao:blt_aplicacao /opt/gateway-sunteh
-            
-            # Executa o chmod usando o find (que já está liberado via curinga '*' no sudoers)
-            sudo -n find /opt/gateway-sunteh -type d -exec chmod 755 {} \;
-            sudo -n find /opt/gateway-sunteh -type f -exec chmod 644 {} \;
-
-            # 6. Reinicia o daemon do systemd e o serviço
-            echo "Iniciando o serviço gateway-sunteh..."
+            echo "=== Reiniciando serviço ==="
             sudo -n systemctl daemon-reload
             sudo -n systemctl start gateway-sunteh
 
-            # 7. Aguarda a inicialização e exibe os logs
-            sleep 3
-            echo "=== Últimos logs do serviço ==="
-            sudo -n journalctl -u gateway-sunteh --no-pager -n 25
+            echo "=== Validação obrigatória pós-deploy ==="
+            # Healthcheck de métricas/healthz (porta 9054)
+            for i in $(seq 1 15); do
+              if curl -fsS "http://127.0.0.1:9054/healthz" >/dev/null; then
+                break
+              fi
+              sleep 1
+              if [ "$i" -eq 15 ]; then
+                fail_with_logs "Healthcheck 9054/healthz falhou"
+              fi
+            done
 
-            echo "=== Deploy do Gateway concluído com sucesso ==="
+            # Hub deve responder 401 no negotiate quando ativo (porta 9055)
+            HUB_CODE="$(curl -s -o /dev/null -w '%{http_code}' -X POST 'http://127.0.0.1:9055/hub/posicoes/negotiate?negotiateVersion=1' || true)"
+            if [ "$HUB_CODE" != "401" ]; then
+              fail_with_logs "Validação do Hub falhou (esperado 401, recebido $HUB_CODE)"
+            fi
+
+            echo "=== Retenção de backups ==="
+            BACKUP_INDEX=0
+            for BKP in $(sh -c "$AS_APP ls -1t '$BACKUPS_DIR'/deploy-*.tgz 2>/dev/null" || true); do
+              BACKUP_INDEX=$((BACKUP_INDEX + 1))
+              if [ "$BACKUP_INDEX" -le "$KEEP_BACKUPS" ]; then
+                continue
+              fi
+              echo "Removendo backup antigo: $BKP"
+              sh -c "$AS_APP rm -f '$BKP'"
+            done
+
+            echo "=== Limpeza do pacote temporário ==="
+            sudo -n rm -rf "$RUN_TMP"
+
+            echo "=== Últimos logs do serviço ==="
+            sudo -n journalctl -u gateway-sunteh --no-pager -n 40
+            echo "=== Deploy endurecido concluído com sucesso ==="

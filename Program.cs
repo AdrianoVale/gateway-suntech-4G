@@ -28,6 +28,24 @@ builder.Services.AddOptions<GatewayOptions>()
 	.ValidateDataAnnotations()
 	.ValidateOnStart();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SignalRCors", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost",
+                "https://localhost",
+                "http://127.0.0.1",
+                "https://127.0.0.1",
+                "https://cliente.bltrastreamentos.com.br",
+                "https://cliente-hmp.bltrastreamentos.com.br")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<IGatewayMetrics, GatewayMetrics>();
 builder.Services.AddSingleton<IDeviceRegistry, DeviceRegistry>();
@@ -119,6 +137,7 @@ var gatewayOptions = app.Services.GetRequiredService<IOptions<GatewayOptions>>()
 
 app.Urls.Clear();
 app.Urls.Add(gatewayOptions.Metrics.Url);
+app.UseCors("SignalRCors");
 if (gatewayOptions.Hub.Enabled)
 {
     app.Urls.Add(gatewayOptions.Hub.Url);
