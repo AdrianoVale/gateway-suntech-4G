@@ -92,7 +92,7 @@ jobs:
                 sudo -n find "$APP_ROOT" -mindepth 1 \
                   -not -path "$APP_ROOT/log" -not -path "$APP_ROOT/log/*" \
                   -not -path "$BACKUPS_DIR" -not -path "$BACKUPS_DIR/*" -delete
-                sh -c "$AS_APP tar -xzf '$BACKUP_FILE' -C '$APP_ROOT'"
+                as_app "tar -xzf '$BACKUP_FILE' -C '$APP_ROOT'"
                 sudo -n systemctl daemon-reload
                 sudo -n systemctl start gateway-sunteh || true
               fi
@@ -132,15 +132,28 @@ jobs:
               fail_with_logs "Diretório da aplicação não encontrado: $APP_ROOT"
             fi
 
-            # Protege contra deploy que derruba o Hub por config ausente
-            if [ ! -f /etc/default/gateway-sunteh ]; then
-              fail_with_logs "Arquivo /etc/default/gateway-sunteh não encontrado"
-            fi
-            grep -q '^Gateway__Hub__Enabled=true$' /etc/default/gateway-sunteh
-            grep -q '^Gateway__Hub__Url=http://127.0.0.1:9055$' /etc/default/gateway-sunteh
-            grep -q '^Gateway__Hub__JwtIssuer=blt-php$' /etc/default/gateway-sunteh
-            grep -q '^Gateway__Hub__JwtAudience=gateway-pos$' /etc/default/gateway-sunteh
-            grep -q '^Gateway__Hub__JwtSecret=.\+$' /etc/default/gateway-sunteh
+            # Protege contra deploy que derruba o Hub por config ausente/inválida
+            SERVICE_ENV="$(sudo -n systemctl show gateway-sunteh -p Environment --value || true)"
+            case "$SERVICE_ENV" in
+              *"Gateway__Hub__Enabled=true"*) ;;
+              *) fail_with_logs "Gateway__Hub__Enabled=true não encontrado no ambiente do serviço" ;;
+            esac
+            case "$SERVICE_ENV" in
+              *"Gateway__Hub__Url=http://127.0.0.1:9055"*) ;;
+              *) fail_with_logs "Gateway__Hub__Url=http://127.0.0.1:9055 não encontrado no ambiente do serviço" ;;
+            esac
+            case "$SERVICE_ENV" in
+              *"Gateway__Hub__JwtIssuer=blt-php"*) ;;
+              *) fail_with_logs "Gateway__Hub__JwtIssuer=blt-php não encontrado no ambiente do serviço" ;;
+            esac
+            case "$SERVICE_ENV" in
+              *"Gateway__Hub__JwtAudience=gateway-pos"*) ;;
+              *) fail_with_logs "Gateway__Hub__JwtAudience=gateway-pos não encontrado no ambiente do serviço" ;;
+            esac
+            case "$SERVICE_ENV" in
+              *"Gateway__Hub__JwtSecret="*) ;;
+              *) fail_with_logs "Gateway__Hub__JwtSecret não encontrado no ambiente do serviço" ;;
+            esac
 
             echo "=== Preparando backup e estado persistente ==="
             sudo -n chown -R blt_aplicacao:blt_aplicacao "$APP_ROOT"
