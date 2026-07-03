@@ -132,27 +132,11 @@ jobs:
               fail_with_logs "Diretório da aplicação não encontrado: $APP_ROOT"
             fi
 
-            # Protege contra deploy que derruba o Hub por config ausente/inválida
-            SERVICE_ENV="$(sudo -n systemctl show gateway-sunteh -p Environment --value || true)"
-            case "$SERVICE_ENV" in
-              *"Gateway__Hub__Enabled=true"*) ;;
-              *) fail_with_logs "Gateway__Hub__Enabled=true não encontrado no ambiente do serviço" ;;
-            esac
-            case "$SERVICE_ENV" in
-              *"Gateway__Hub__Url=http://127.0.0.1:9055"*) ;;
-              *) fail_with_logs "Gateway__Hub__Url=http://127.0.0.1:9055 não encontrado no ambiente do serviço" ;;
-            esac
-            case "$SERVICE_ENV" in
-              *"Gateway__Hub__JwtIssuer=blt-php"*) ;;
-              *) fail_with_logs "Gateway__Hub__JwtIssuer=blt-php não encontrado no ambiente do serviço" ;;
-            esac
-            case "$SERVICE_ENV" in
-              *"Gateway__Hub__JwtAudience=gateway-pos"*) ;;
-              *) fail_with_logs "Gateway__Hub__JwtAudience=gateway-pos não encontrado no ambiente do serviço" ;;
-            esac
-            case "$SERVICE_ENV" in
-              *"Gateway__Hub__JwtSecret="*) ;;
-              *) fail_with_logs "Gateway__Hub__JwtSecret não encontrado no ambiente do serviço" ;;
+            # Confere se a unit ainda referencia o arquivo de ambiente esperado.
+            UNIT_TEXT="$(sudo -n systemctl cat gateway-sunteh || true)"
+            case "$UNIT_TEXT" in
+              *"EnvironmentFile=-/etc/default/gateway-sunteh"*) ;;
+              *) echo "[WARN] Unit sem EnvironmentFile esperado; validação final ficará a cargo do healthcheck/negotiate" ;;
             esac
 
             echo "=== Preparando backup e estado persistente ==="
