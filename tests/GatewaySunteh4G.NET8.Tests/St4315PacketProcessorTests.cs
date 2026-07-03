@@ -84,6 +84,7 @@ public sealed class St4315PacketProcessorTests
         Assert.Equal(62, position.Speed);
         Assert.Equal(10, position.Sat);
         Assert.True(position.Gps);
+        Assert.Equal(13.5, position.BatMain, 6);
         Assert.Equal(1, metrics.MessagesDecoded);
         Assert.Equal(0, metrics.DecodeErrors);
     }
@@ -118,6 +119,7 @@ public sealed class St4315PacketProcessorTests
         Assert.Equal(38.479323, position.Latitude, 6);
         Assert.Equal(127.887827, position.Longitude, 6);
         Assert.Equal(38, position.Speed);
+        Assert.Equal(0, position.BatMain);
         Assert.Equal(1, metrics.MessagesDecoded);
         Assert.Equal(0, metrics.DecodeErrors);
     }
@@ -151,6 +153,8 @@ public sealed class St4315PacketProcessorTests
         var confirmedDevice = Assert.Single(dispatcher.ConfirmCalls);
         Assert.Equal("123456789", confirmedDevice);
         Assert.Empty(dispatcher.RetryCalls);
+        var position = Assert.Single(persistence.PersistedPositions);
+        Assert.Equal(12.6, position.BatMain, 6);
         Assert.Equal(1, metrics.MessagesDecoded);
     }
 

@@ -97,7 +97,7 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             var inputField = GetField(fields, isExtended ? 19 : 14);
             var outputField = GetField(fields, isExtended ? 20 : 15);
             var modeField = GetField(fields, isExtended ? 21 : 16);
-            var batteryField = GetField(fields, isExtended ? 24 : 21);
+            var batteryField = ResolveTelemetryBatteryField(fields, isExtended);
             var batteryBackupField = GetOptionalField(fields, isExtended ? 25 : 22);
 
             if (!IsSupportedDeviceId(deviceId))
@@ -285,6 +285,8 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             var fixField = GetField(fields, 18);
             var inputField = GetField(fields, 19);
             var outputField = GetField(fields, 20);
+            var batteryField = ResolveExternalBatteryField(fields);
+            var batteryBackupField = ResolveExternalBackupBatteryField(fields);
 
             if (!IsSupportedDeviceId(deviceId))
             {
@@ -329,8 +331,8 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
                 Ign = ReadFlag(inputField, inputField.Length - 1),
                 Block = ReadFlag(outputField, outputField.Length - 1),
                 Io = NormalizeIo(outputField),
-                BatMain = 0d,
-                BatBack = 0d,
+                BatMain = ParseDouble(batteryField),
+                BatBack = ParseNullableDouble(batteryBackupField),
                 Storage = msgTypeField == "0",
                 MsgTypeId = MapMessageType(canonicalHeader, msgTypeField),
                 DeviceModelId = ParseInt(model)
@@ -381,6 +383,8 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             var latitudeFinish = GetField(fields, 10);
             var longitudeFinish = GetField(fields, 11);
             var avgSpeedField = GetTravelAverageSpeedField(fields);
+            var batteryField = ResolveTravelBatteryField(fields);
+            var batteryBackupField = ResolveTravelBackupBatteryField(fields);
 
             if (!IsSupportedDeviceId(deviceId))
             {
@@ -428,8 +432,8 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
                 Ign = false,
                 Block = false,
                 Io = "000000",
-                BatMain = 0d,
-                BatBack = 0d,
+                BatMain = ParseDouble(batteryField),
+                BatBack = ParseNullableDouble(batteryBackupField),
                 Storage = msgTypeField == "0",
                 MsgTypeId = MapMessageType(canonicalHeader, msgTypeField),
                 DeviceModelId = ParseInt(model)
@@ -508,7 +512,16 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
 
     private static double ParseDouble(string value)
     {
-        return double.TryParse(value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var parsed) ? parsed : 0d;
+        if (double.TryParse(value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var parsed))
+        {
+            return parsed;
+        }
+
+        // Alguns devices enviam decimal com vírgula; normaliza sem quebrar o formato com ponto.
+        var normalized = value?.Trim().Replace(',', '.');
+        return double.TryParse(normalized, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out parsed)
+            ? parsed
+            : 0d;
     }
 
     private static double ParseNullableDouble(string value)
@@ -552,6 +565,46 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             "ATRV" => "TRV",
             _ => header
         };
+    }
+
+    private static string ResolveTelemetryBatteryField(string[] fields, bool isExtended)
+    {
+        if (isExtended)
+        {
+            return GetOptionalField(fields, 24);
+        }
+
+        // No formato STT/ALT não estendido, alguns dispositivos usam o índice 24.
+        var primary = GetOptionalField(fields, 24);
+        if (!string.IsNullOrWhiteSpace(primary))
+        {
+            return primary;
+        }
+
+        return GetOptionalField(fields, 21);
+    }
+
+    private static string ResolveExternalBatteryField(string[] fields)
+    {
+        // UEX/AUEX costuma trazer bateria principal no final do payload.
+        return GetOptionalField(fields, fields.Length - 1);
+    }
+
+    private static string ResolveExternalBackupBatteryField(string[] fields)
+    {
+        // Campo imediatamente anterior pode conter bateria backup em alguns layouts.
+        return GetOptionalField(fields, fields.Length - 2);
+    }
+
+    private static string ResolveTravelBatteryField(string[] fields)
+    {
+        // TRV/ATRV pode trazer bateria principal no final do payload (quando disponível).
+        return GetOptionalField(fields, fields.Length - 1);
+    }
+
+    private static string ResolveTravelBackupBatteryField(string[] fields)
+    {
+        return GetOptionalField(fields, fields.Length - 2);
     }
 
     private static string GetTravelAverageSpeedField(string[] fields)
