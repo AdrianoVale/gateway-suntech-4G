@@ -203,3 +203,36 @@ DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
 2026-07-02 19:07:09.665 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (1): Request starting HTTP/1.1 GET http://127.0.0.1:9055/favicon.ico - - -
 2026-07-02 19:07:09.724 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (2): Request finished HTTP/1.1 GET http://127.0.0.1:9055/favicon.ico - 404 0 - 59.5341ms
 2026-07-02 19:07:09.738 -03:00 [Information] Microsoft.AspNetCore.Hosting.Diagnostics (16): Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://127.0.0.1:9055/favicon.ico, Response status code: 404
+2026-07-02 21:39:03.917 -03:00 [Warning] GatewaySunteh4G_NET8.Services.PostgresDataService: PostgreSQL: falha transitória em GetCommands (tentativa 1/2). Nova tentativa em 219ms
+Npgsql.NpgsqlException (0x80004005): The operation has timed out
+ ---> System.TimeoutException: The operation has timed out.
+   at Npgsql.ThrowHelper.ThrowNpgsqlExceptionWithInnerTimeoutException(String message)
+   at Npgsql.Util.NpgsqlTimeout.Check()
+   at Npgsql.Util.NpgsqlTimeout.CheckAndGetTimeLeft()
+   at Npgsql.Util.NpgsqlTimeout.CheckAndApply(NpgsqlConnector connector)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.Open()
+   at GatewaySunteh4G_NET8.Services.PostgresDataService.OpenConnection() in C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\Services\PostgresDataService.cs:line 254
+   at GatewaySunteh4G_NET8.Services.PostgresDataService.<>c__DisplayClass15_0.<GetCommands>b__0() in C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\Services\PostgresDataService.cs:line 144
+   at GatewaySunteh4G_NET8.Services.PostgresDataService.ExecuteWithRetry[T](Func`1 operation, String operationName, String deviceId) in C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\Services\PostgresDataService.cs:line 272
+2026-07-02 21:39:03.926 -03:00 [Warning] GatewaySunteh4G_NET8.Services.PostgresDataService: PostgreSQL: falha transitória em GetTotalPositionCount (tentativa 1/2). Nova tentativa em 244ms
+Npgsql.NpgsqlException (0x80004005): The operation has timed out
+ ---> System.TimeoutException: The operation has timed out.
+   at Npgsql.ThrowHelper.ThrowNpgsqlExceptionWithInnerTimeoutException(String message)
+   at Npgsql.Util.NpgsqlTimeout.Check()
+   at Npgsql.Util.NpgsqlTimeout.CheckAndGetTimeLeft()
+   at Npgsql.Util.NpgsqlTimeout.CheckAndApply(NpgsqlConnector connector)
+   at Npgsql.Internal.NpgsqlConnector.RawOpen(SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.Open()
+   at GatewaySunteh4G_NET8.Services.PostgresDataService.OpenConnection() in C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\Services\PostgresDataService.cs:line 254
+   at GatewaySunteh4G_NET8.Services.PostgresDataService.<GetTotalPositionCount>b__11_0() in C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\Services\PostgresDataService.cs:line 103
+   at GatewaySunteh4G_NET8.Services.PostgresDataService.ExecuteWithRetry[T](Func`1 operation, String operationName, String deviceId) in C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\Services\PostgresDataService.cs:line 272

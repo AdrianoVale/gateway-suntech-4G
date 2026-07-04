@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "V1y4Zd2IeZw=",
+  "dgSpecHash": "1yG/G5uwjjo=",
   "success": true,
   "projectFilePath": "C:\\Users\\torresVale\\Documents\\GatewaySunteh4G-NET8\\GatewaySunteh4G-NET8.csproj",
   "expectedPackageFiles": [
@@ -14,8 +14,7 @@
     "C:\\Users\\torresVale\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\7.1.2\\microsoft.identitymodel.protocols.openidconnect.7.1.2.nupkg.sha512",
     "C:\\Users\\torresVale\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.1.2\\microsoft.identitymodel.tokens.7.1.2.nupkg.sha512",
     "C:\\Users\\torresVale\\.nuget\\packages\\npgsql\\8.0.5\\npgsql.8.0.5.nupkg.sha512",
-    "C:\\Users\\torresVale\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.1.2\\system.identitymodel.tokens.jwt.7.1.2.nupkg.sha512",
-    "C:\\Users\\torresVale\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\8.0.26\\microsoft.netcore.app.host.linux-x64.8.0.26.nupkg.sha512"
+    "C:\\Users\\torresVale\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.1.2\\system.identitymodel.tokens.jwt.7.1.2.nupkg.sha512"
   ],
   "logs": []
 }

@@ -113,3 +113,12 @@ C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Te
 C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\publish_out\appsettings.Development.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\publish_out\appsettings.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\publish_out\GatewaySunteh4G-NET8.deps.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\publish_out\GatewaySunteh4G-NET8.runtimeconfig.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\publish_out\publish_out\appsettings.Development.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\publish_out\publish_out\appsettings.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\publish_out\publish_out\GatewaySunteh4G-NET8.deps.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\bin\Debug\net8.0\publish_out\publish_out\GatewaySunteh4G-NET8.runtimeconfig.json
+C:\Users\torresVale\Documents\GatewaySunteh4G-NET8\tests\GatewaySunteh4G.NET8.Tests\obj\Debug\net8.0\GatewaySunteh4G.NET8.Tests.sourcelink.json
