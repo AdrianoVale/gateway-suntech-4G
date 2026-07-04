@@ -141,7 +141,8 @@ VALUES (@device_id, @datetime, @lat, @lon, @speed, @degree, @gps, @sat, @ign, @b
             ORDER BY datetime DESC
             LIMIT 1";
 
-        if (!decimal.TryParse(deviceId, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedDeviceId))
+        // Validar que é numérico, mas passar como Varchar porque position.device_id é character varying
+        if (!decimal.TryParse(deviceId, NumberStyles.Integer, CultureInfo.InvariantCulture, out _))
             return null;
 
         if (IsCircuitOpen())
@@ -153,7 +154,7 @@ VALUES (@device_id, @datetime, @lat, @lon, @speed, @degree, @gps, @sat, @ign, @b
             {
                 using var connection = OpenConnection();
                 using var command = CreateCommand(connection, sql);
-                AddParameter(command, "@device_id", NpgsqlDbType.Numeric, parsedDeviceId);
+                AddParameter(command, "@device_id", NpgsqlDbType.Varchar, deviceId);
                 using var reader = command.ExecuteReader();
                 if (!reader.Read())
                     return null as (double, double)?;
