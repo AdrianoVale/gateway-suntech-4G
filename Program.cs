@@ -134,6 +134,13 @@ builder.Services.AddHostedService<PositionMaintenanceWorker>();
 
 var app = builder.Build();
 var gatewayOptions = app.Services.GetRequiredService<IOptions<GatewayOptions>>().Value;
+var startupLogger = app.Services.GetRequiredService<ILoggerFactory>().CreateLogger("GatewayStartup");
+
+startupLogger.LogInformation(
+    "Hub.Enabled={HubEnabled}. PositionHubPublisher={PositionPublisherType}. CommandHubPublisher={CommandPublisherType}",
+    gatewayOptions.Hub.Enabled,
+    app.Services.GetRequiredService<IPositionHubPublisher>().GetType().Name,
+    app.Services.GetRequiredService<ICommandHubPublisher>().GetType().Name);
 
 app.Urls.Clear();
 app.Urls.Add(gatewayOptions.Metrics.Url);
