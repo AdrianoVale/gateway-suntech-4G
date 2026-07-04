@@ -1,5 +1,6 @@
 using GatewaySunteh4G_NET8.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace GatewaySunteh4G_NET8.Services;
 
@@ -9,22 +10,53 @@ namespace GatewaySunteh4G_NET8.Services;
 public sealed class CommandHubPublisher : ICommandHubPublisher
 {
     private readonly IHubContext<PositionHub> _hub;
+    private readonly ILogger<CommandHubPublisher> _logger;
 
-    public CommandHubPublisher(IHubContext<PositionHub> hub)
+    public CommandHubPublisher(IHubContext<PositionHub> hub, ILogger<CommandHubPublisher> logger)
     {
         _hub = hub;
+        _logger = logger;
     }
 
-    public Task PublishAsync(string deviceId, int commandId, int statusId)
+    public async Task PublishAsync(string deviceId, int commandId, int statusId)
     {
         var group = PositionHub.GroupName(deviceId);
-        return _hub.Clients.Group(group).SendAsync("AtualizacaoComando", new
-        {
-            commandId,
+        var situacao = MapStatusText(statusId);
+
+        _logger.LogDebug(
+            "[CommandHubPublisher] Enviando AtualizacaoComando para grupo {Group}. deviceId={DeviceId}, commandId={CommandId}, statusId={StatusId}, situacao={Situacao}",
+            group,
             deviceId,
+            commandId,
             statusId,
-            situacao = MapStatusText(statusId)
-        });
+            situacao);
+
+        try
+        {
+            await _hub.Clients.Group(group).SendAsync("AtualizacaoComando", new
+            {
+                commandId,
+                deviceId,
+                statusId,
+                situacao
+            });
+
+            _logger.LogDebug(
+                "[CommandHubPublisher] AtualizacaoComando enviado com sucesso para grupo {Group}. commandId={CommandId}",
+                group,
+                commandId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "[CommandHubPublisher] Falha ao enviar AtualizacaoComando para grupo {Group}. deviceId={DeviceId}, commandId={CommandId}, statusId={StatusId}",
+                group,
+                deviceId,
+                commandId,
+                statusId);
+            throw;
+        }
     }
 
     private static string MapStatusText(int statusId) => statusId switch
