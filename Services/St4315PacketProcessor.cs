@@ -83,22 +83,28 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
     {
         try
         {
-            var isExtended = fields.Length > 28;
+            // Formato estendido: data (YYYYMMDD) aparece na posição 6; formato curto traz lat/lon antes.
+            var isExtended = IsExtendedTelemetryPacket(fields);
             var deviceId = GetField(fields, 1);
             var model = GetField(fields, 3);
-            var date = GetField(fields, 6);
-            var time = GetField(fields, 7);
-            var latitude = GetField(fields, isExtended ? 13 : 8);
-            var longitude = GetField(fields, isExtended ? 14 : 9);
-            var speedField = GetField(fields, isExtended ? 15 : 10);
-            var degreeField = GetField(fields, isExtended ? 16 : 11);
-            var satField = GetField(fields, isExtended ? 17 : 12);
-            var fixField = GetField(fields, isExtended ? 18 : 13);
-            var inputField = GetField(fields, isExtended ? 19 : 14);
-            var outputField = GetField(fields, isExtended ? 20 : 15);
-            var modeField = GetField(fields, isExtended ? 21 : 16);
+            var date = GetField(fields, isExtended ? 6 : 3);
+            var time = GetField(fields, isExtended ? 7 : 4);
+            var latitude = GetField(fields, isExtended ? 13 : 5);
+            var longitude = GetField(fields, isExtended ? 14 : 6);
+            var speedField = GetField(fields, isExtended ? 15 : 7);
+            var degreeField = GetField(fields, isExtended ? 16 : 8);
+            var satField = GetField(fields, isExtended ? 17 : 9);
+            var fixField = GetField(fields, isExtended ? 18 : 10);
+            var inputField = GetField(fields, isExtended ? 19 : 11);
+            var outputField = GetField(fields, isExtended ? 20 : 12);
+            var modeField = GetField(fields, isExtended ? 21 : 13);
+            // No formato estendido: layout final é [...;bat_back;bat_main;hex_footer]
             var batteryField = ResolveTelemetryBatteryField(fields, isExtended);
-            var batteryBackupField = GetOptionalField(fields, isExtended ? 25 : 22);
+            var batteryBackupField = GetOptionalField(fields, isExtended ? fields.Length - 3 : 22);
+
+            _logger.LogDebug(
+                "Pacote {Header} device {DeviceId}: isExtended={IsExtended} campos={FieldCount} batMainField=[{BatMain}] batBackField=[{BatBack}]",
+                header, deviceId, isExtended, fields.Length, batteryField, batteryBackupField);
 
             if (!IsSupportedDeviceId(deviceId))
             {
@@ -571,7 +577,12 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
     {
         if (isExtended)
         {
-            return GetOptionalField(fields, 24);
+            // No formato estendido o penúltimo campo é sempre bat_main.
+            // Layout: [...;bat_back;bat_main;hex_footer]
+            // Exemplos:
+            //   ...;800003;3.6;11.94;500000193E0CCD01  (28 campos → índice 26)
+            //   ...;3.6;11.94;500000193E0CCD01          (27 campos → índice 25)
+            return GetOptionalField(fields, fields.Length - 2);
         }
 
         // No formato STT/ALT não estendido, alguns dispositivos usam o índice 24.
@@ -582,6 +593,22 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
         }
 
         return GetOptionalField(fields, 21);
+    }
+
+    /// <summary>
+    /// Detecta formato estendido pelo padrão de data YYYYMMDD na posição 6.
+    /// Formato estendido: STT;device;mask;model;info;msgtype;YYYYMMDD;HH:mm:ss;...
+    /// Formato curto:     STT;device;[hex;]date;time;lat;lon;...
+    /// </summary>
+    private static bool IsExtendedTelemetryPacket(string[] fields)
+    {
+        if (fields.Length <= 6)
+        {
+            return false;
+        }
+
+        var candidate = fields[6].Trim();
+        return candidate.Length == 8 && candidate.All(char.IsDigit);
     }
 
     private static string ResolveExternalBatteryField(string[] fields)

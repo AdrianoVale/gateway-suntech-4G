@@ -142,6 +142,16 @@ startupLogger.LogInformation(
     app.Services.GetRequiredService<IPositionHubPublisher>().GetType().Name,
     app.Services.GetRequiredService<ICommandHubPublisher>().GetType().Name);
 
+startupLogger.LogInformation(
+    "Postgres config: ConnectTimeoutSeconds={ConnectTimeoutSeconds}, CommandTimeoutSeconds={CommandTimeoutSeconds}, KeepAliveSeconds={KeepAliveSeconds}, MaxRetryAttempts={MaxRetryAttempts}, RetryBaseDelayMilliseconds={RetryBaseDelayMilliseconds}, RetryMaxDelayMilliseconds={RetryMaxDelayMilliseconds}, CircuitOpenSeconds={CircuitOpenSeconds}",
+    gatewayOptions.PostgresDatabase.ConnectTimeoutSeconds,
+    gatewayOptions.PostgresDatabase.CommandTimeoutSeconds,
+    gatewayOptions.PostgresDatabase.KeepAliveSeconds,
+    gatewayOptions.PostgresDatabase.MaxRetryAttempts,
+    gatewayOptions.PostgresDatabase.RetryBaseDelayMilliseconds,
+    gatewayOptions.PostgresDatabase.RetryMaxDelayMilliseconds,
+    gatewayOptions.PostgresDatabase.CircuitOpenSeconds);
+
 app.Urls.Clear();
 app.Urls.Add(gatewayOptions.Metrics.Url);
 app.UseCors("SignalRCors");

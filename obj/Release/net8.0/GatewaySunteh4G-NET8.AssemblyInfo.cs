@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GatewaySunteh4G-NET8")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cc4518cc721fa15e71ad078f3876b1ac162d07a2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b4980c24cdc7a00997ba16c4ccaba2d072562cfc")]
 [assembly: System.Reflection.AssemblyProductAttribute("GatewaySunteh4G-NET8")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GatewaySunteh4G-NET8")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
