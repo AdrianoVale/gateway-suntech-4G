@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Net;
 using System.Text;
@@ -9,6 +10,9 @@ namespace GatewaySunteh4G_NET8.Services;
 public sealed class St4315PacketProcessor : IGatewayPacketProcessor
 {
     private const int MaxDeviceIdDigits = 19;
+    // Cache em memória da última leitura válida de bateria por device (bat_main 10–25V, bat_back 2–6V).
+    // Evita consulta ao banco em cada pacote ALT; o banco é consultado apenas no primeiro miss por device.
+    private readonly ConcurrentDictionary<string, (double BatMain, double BatBack)> _batteryCache = new();
     private readonly ILogger<St4315PacketProcessor> _logger;
     private readonly IGatewayMetrics _metrics;
     private readonly IDeviceRegistry _deviceRegistry;
@@ -99,8 +103,13 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             var outputField = GetField(fields, isExtended ? 20 : 12);
             var modeField = GetField(fields, isExtended ? 21 : 13);
             // No formato estendido: layout final é [...;bat_back;bat_main;hex_footer]
+            // Apenas valores decimais (ex: "13.18", "4.2") são tensão; inteiros nessa posição
+            // são odômetro, sinal ou outros campos que não devem ser persistidos como bateria.
             var batteryField = ResolveTelemetryBatteryField(fields, isExtended);
-            var batteryBackupField = GetOptionalField(fields, isExtended ? fields.Length - 3 : 22);
+            var rawBatBackup = GetOptionalField(fields, isExtended ? fields.Length - 3 : 22);
+            var batteryBackupField = isExtended
+                ? (IsVoltageValue(rawBatBackup) ? rawBatBackup : string.Empty)
+                : rawBatBackup;
 
             _logger.LogDebug(
                 "Pacote {Header} device {DeviceId}: isExtended={IsExtended} campos={FieldCount} batMainField=[{BatMain}] batBackField=[{BatBack}]",
@@ -134,6 +143,42 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             });
 
             _metrics.IncrementMessagesDecoded();
+
+            // Calcular bat_main e bat_back antes de montar o PositionRecord.
+            // Pacotes ALT geralmente não carregam tensão de bateria; nesses casos,
+            // reaproveitar a última leitura válida (cache em memória → fallback banco).
+            var batMain = ParseDouble(batteryField);
+            var batBack = ParseNullableDouble(batteryBackupField);
+
+            if (batMain > 0)
+            {
+                // Pacote tem tensão válida — atualizar cache para reutilização futura
+                _batteryCache[deviceId] = (batMain, batBack);
+            }
+            else
+            {
+                // Sem dados de bateria no pacote — buscar último valor válido
+                if (!_batteryCache.TryGetValue(deviceId, out var cached))
+                {
+                    // Cache miss: consultar banco (apenas na primeira ocorrência após reinicialização)
+                    var dbBattery = _positionPersistenceService.GetLastValidBattery(deviceId);
+                    if (dbBattery.HasValue)
+                    {
+                        _batteryCache[deviceId] = dbBattery.Value;
+                        cached = dbBattery.Value;
+                    }
+                    // Se o banco também não tiver histórico, cached permanece (0,0)
+                }
+                if (cached.BatMain > 0)
+                {
+                    batMain = cached.BatMain;
+                    batBack = cached.BatBack;
+                    _logger.LogDebug(
+                        "Bateria reaproveitada do histórico para device {DeviceId}: batMain={BatMain} batBack={BatBack}",
+                        deviceId, batMain, batBack);
+                }
+            }
+
             var positionRecord = new PositionRecord
             {
                 DeviceId      = deviceId,
@@ -147,8 +192,8 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
                 Ign           = ReadFlag(inputField, inputField.Length - 1),
                 Block         = ReadFlag(outputField, outputField.Length - 1),
                 Io            = NormalizeIo(outputField),
-                BatMain       = ParseDouble(batteryField),
-                BatBack       = ParseNullableDouble(batteryBackupField),
+                BatMain       = batMain,
+                BatBack       = batBack,
                 Storage       = false,
                 MsgTypeId     = MapMessageType(header, modeField),
                 DeviceModelId = ParseInt(model)
@@ -577,12 +622,15 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
     {
         if (isExtended)
         {
-            // No formato estendido o penúltimo campo é sempre bat_main.
-            // Layout: [...;bat_back;bat_main;hex_footer]
+            // No formato estendido o penúltimo campo é bat_main quando é tensão decimal.
+            // Pacotes ALT/STT sem dado de bateria trazem odômetro ou sinal nessa posição
+            // (inteiros sem ponto decimal, ex: 1905368 ou 71) — esses devem ser ignorados.
+            // Layout com bateria:    [...;bat_back;bat_main;hex_footer]
             // Exemplos:
             //   ...;800003;3.6;11.94;500000193E0CCD01  (28 campos → índice 26)
             //   ...;3.6;11.94;500000193E0CCD01          (27 campos → índice 25)
-            return GetOptionalField(fields, fields.Length - 2);
+            var candidate = GetOptionalField(fields, fields.Length - 2);
+            return IsVoltageValue(candidate) ? candidate : string.Empty;
         }
 
         // No formato STT/ALT não estendido, alguns dispositivos usam o índice 24.
@@ -593,6 +641,20 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
         }
 
         return GetOptionalField(fields, 21);
+    }
+
+    /// <summary>
+    /// Retorna true se o valor parece ser uma tensão de bateria (contém ponto decimal
+    /// e está dentro da faixa razoável para sistemas veiculares: 0–100 V).
+    /// Valores inteiros como odômetro (1905368) ou percentual de sinal (71) retornam false.
+    /// </summary>
+    private static bool IsVoltageValue(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return false;
+        var trimmed = value.Trim();
+        return trimmed.Contains('.') &&
+               double.TryParse(trimmed, NumberStyles.Float, CultureInfo.InvariantCulture, out var v) &&
+               v >= 0.0 && v <= 100.0;
     }
 
     /// <summary>

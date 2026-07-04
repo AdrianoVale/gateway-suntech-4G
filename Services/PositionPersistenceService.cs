@@ -71,6 +71,9 @@ public sealed class PositionPersistenceService : IPositionPersistenceService
         return count;
     }
 
+    public (double BatMain, double BatBack)? GetLastValidBattery(string deviceId)
+        => _dataService.GetLastValidBattery(deviceId);
+
     private void TryInsertVehicleTable(PositionRecord position, string? plate)
     {
         if (string.IsNullOrWhiteSpace(plate))

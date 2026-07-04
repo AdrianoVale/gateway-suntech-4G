@@ -130,6 +130,43 @@ VALUES (@device_id, @datetime, @lat, @lon, @speed, @degree, @gps, @sat, @ign, @b
         return false;
     }
 
+    public (double BatMain, double BatBack)? GetLastValidBattery(string deviceId)
+    {
+        const string sql = @"
+            SELECT bat_main, bat_back
+            FROM position
+            WHERE device_id = @device_id
+              AND bat_main BETWEEN 10 AND 25
+              AND bat_back BETWEEN 2 AND 6
+            ORDER BY datetime DESC
+            LIMIT 1";
+
+        if (!decimal.TryParse(deviceId, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedDeviceId))
+            return null;
+
+        if (IsCircuitOpen())
+            return null;
+
+        try
+        {
+            return ExecuteWithRetry(() =>
+            {
+                using var connection = OpenConnection();
+                using var command = CreateCommand(connection, sql);
+                AddParameter(command, "@device_id", NpgsqlDbType.Numeric, parsedDeviceId);
+                using var reader = command.ExecuteReader();
+                if (!reader.Read())
+                    return null as (double, double)?;
+                return (reader.GetDouble(0), reader.GetDouble(1));
+            }, nameof(GetLastValidBattery), deviceId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "PostgreSQL: falha ao buscar última bateria válida para device {DeviceId}", deviceId);
+            return null;
+        }
+    }
+
     public IReadOnlyList<CommandRecord> GetCommands(bool includeStatus3)
     {
         const string sql = @"SELECT id, device_id, criado, atualizado, parametros, tipo_comando_id, status_comando_id
