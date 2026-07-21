@@ -110,7 +110,7 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             var batteryBackupField = isExtended
                 ? (IsVoltageValue(rawBatBackup) ? rawBatBackup : string.Empty)
                 : rawBatBackup;
-
+            _logger.LogInformation("Pacote bruto recebido de {RemoteEndPoint}: {RawMessage} em {ReceivedAtUtc}", remoteEndPoint, rawMessage, receivedAtUtc);
             _logger.LogDebug(
                 "Pacote {Header} device {DeviceId}: isExtended={IsExtended} campos={FieldCount} batMainField=[{BatMain}] batBackField=[{BatBack}]",
                 header, deviceId, isExtended, fields.Length, batteryField, batteryBackupField);
