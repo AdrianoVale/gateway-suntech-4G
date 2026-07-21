@@ -21,6 +21,8 @@ internal sealed class FakeGatewayDataService : IGatewayDataService
 
     public bool EnsureVehicleTableAndInsert(PositionRecord position, string plate) => true;
 
+    public (double BatMain, double BatBack)? GetLastValidBattery(string deviceId) => null;
+
     public IReadOnlyList<CommandRecord> GetCommands(bool includeStatus3) => Array.Empty<CommandRecord>();
 
     public IReadOnlyList<CommandRecord> GetCommandsByDeviceId(string deviceId, bool includeStatus3) => Array.Empty<CommandRecord>();
@@ -152,6 +154,8 @@ internal sealed class FakePositionPersistenceService : IPositionPersistenceServi
     }
 
     public int PendingCacheCount() => 0;
+
+    public (double BatMain, double BatBack)? GetLastValidBattery(string deviceId) => null;
 }
 
 internal sealed class FakeCommandDispatcher : ICommandDispatcher

@@ -185,6 +185,42 @@ public sealed class St4315PacketProcessorTests
     }
 
     [Fact]
+    public async Task ProcessAsync_SttPacket_Extended33Fields_ShouldParseBatteryAtIndex26And27()
+    {
+        // Pacote STT estendido com 33 campos onde bat_main está no índice 26 e bat_back no índice 27,
+        // seguidos de campos adicionais (sem hex_footer fixo no fim).
+        // Formato: ...;0003800F;13.29;4.0;;10;5916;5916;43
+        var metrics = new FakeGatewayMetrics();
+        var deviceRegistry = new DeviceRegistry();
+        var commandRegistry = new CommandRegistry();
+        var persistence = new FakePositionPersistenceService();
+        var dispatcher = new FakeCommandDispatcher();
+
+        var processor = BuildProcessor(metrics, deviceRegistry, commandRegistry, persistence, dispatcher);
+
+        var stt = "STT;2290032096;FFFFFF;229;1.0.13;1;20260721;20:09:05;0918EBD4;724;2;98F4;59;-1.353393;-48.410495;23.26;358.08;16;1;00000001;00000000;1;1;0068;;0003800F;13.29;4.0;;10;5916;5916;43";
+        var envelope = new UdpEnvelope(
+            Encoding.ASCII.GetBytes(stt),
+            new IPEndPoint(IPAddress.Parse("10.0.0.1"), 9999),
+            DateTimeOffset.UtcNow);
+
+        await processor.ProcessAsync(envelope, CancellationToken.None);
+
+        Assert.True(deviceRegistry.TryGet("2290032096", out var session));
+        Assert.NotNull(session);
+        Assert.Equal("STT", session.Header);
+
+        var position = Assert.Single(persistence.PersistedPositions);
+        Assert.Equal("2290032096", position.DeviceId);
+        Assert.Equal(-1.353393, position.Latitude, 6);
+        Assert.Equal(-48.410495, position.Longitude, 6);
+        Assert.Equal(13.29, position.BatMain, 6);
+        Assert.Equal(4.0, position.BatBack, 6);
+        Assert.Equal(1, metrics.MessagesDecoded);
+        Assert.Equal(0, metrics.DecodeErrors);
+    }
+
+    [Fact]
     public async Task ProcessAsync_AlvPacket_ShouldCallRetry_NotConfirm()
     {
         // ALV (heartbeat) não carrega posição real — deve continuar usando Retry, não Confirm.

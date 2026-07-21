@@ -105,11 +105,7 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             // No formato estendido: layout final é [...;bat_back;bat_main;hex_footer]
             // Apenas valores decimais (ex: "13.18", "4.2") são tensão; inteiros nessa posição
             // são odômetro, sinal ou outros campos que não devem ser persistidos como bateria.
-            var batteryField = ResolveTelemetryBatteryField(fields, isExtended);
-            var rawBatBackup = GetOptionalField(fields, isExtended ? fields.Length - 3 : 22);
-            var batteryBackupField = isExtended
-                ? (IsVoltageValue(rawBatBackup) ? rawBatBackup : string.Empty)
-                : rawBatBackup;
+            var (batteryField, batteryBackupField) = ResolveTelemetryBatteryFields(fields, isExtended);
             _logger.LogInformation("Pacote bruto recebido de {RemoteEndPoint}: {RawMessage} em {ReceivedAtUtc}", remoteEndPoint, rawMessage, receivedAtUtc);
             _logger.LogDebug(
                 "Pacote {Header} device {DeviceId}: isExtended={IsExtended} campos={FieldCount} batMainField=[{BatMain}] batBackField=[{BatBack}]",
@@ -618,29 +614,47 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
         };
     }
 
-    private static string ResolveTelemetryBatteryField(string[] fields, bool isExtended)
+    /// <summary>
+    /// Resolve bat_main e bat_back em pacotes STT/ALT para ambos os layouts estendidos conhecidos.
+    /// <br/>Layout antigo: <c>[...;bat_back;bat_main;hex_footer]</c> — bat_main é o penúltimo campo.
+    /// <br/>Layout novo:  <c>[...;bat_main;bat_back;campos_extras...]</c> — par consecutivo de tensões
+    ///   a partir do índice 22, sem hex_footer obrigatório no fim.
+    /// </summary>
+    private static (string BatMain, string BatBack) ResolveTelemetryBatteryFields(string[] fields, bool isExtended)
     {
-        if (isExtended)
+        if (!isExtended)
         {
-            // No formato estendido o penúltimo campo é bat_main quando é tensão decimal.
-            // Pacotes ALT/STT sem dado de bateria trazem odômetro ou sinal nessa posição
-            // (inteiros sem ponto decimal, ex: 1905368 ou 71) — esses devem ser ignorados.
-            // Layout com bateria:    [...;bat_back;bat_main;hex_footer]
-            // Exemplos:
-            //   ...;800003;3.6;11.94;500000193E0CCD01  (28 campos → índice 26)
-            //   ...;3.6;11.94;500000193E0CCD01          (27 campos → índice 25)
-            var candidate = GetOptionalField(fields, fields.Length - 2);
-            return IsVoltageValue(candidate) ? candidate : string.Empty;
+            // Formato não estendido: bat_main em índice 24 (ou 21 como fallback), bat_back em 22.
+            var primary = GetOptionalField(fields, 24);
+            var batMain = !string.IsNullOrWhiteSpace(primary) ? primary : GetOptionalField(fields, 21);
+            return (batMain, GetOptionalField(fields, 22));
         }
 
-        // No formato STT/ALT não estendido, alguns dispositivos usam o índice 24.
-        var primary = GetOptionalField(fields, 24);
-        if (!string.IsNullOrWhiteSpace(primary))
+        // Formato estendido — layout antigo: bat_main é o penúltimo campo (antes de hex_footer).
+        // Exemplos:
+        //   ...;800003;3.6;11.94;500000193E0CCD01  (28 campos → bat_main índice 26)
+        //   ...;3.6;11.94;500000193E0CCD01          (27 campos → bat_main índice 25)
+        var endCandidate = GetOptionalField(fields, fields.Length - 2);
+        if (IsVoltageValue(endCandidate))
         {
-            return primary;
+            var backCandidate = GetOptionalField(fields, fields.Length - 3);
+            return (endCandidate, IsVoltageValue(backCandidate) ? backCandidate : string.Empty);
         }
 
-        return GetOptionalField(fields, 21);
+        // Layout novo: sem hex_footer fixo no fim; bat_main e bat_back são o primeiro par
+        // de tensões consecutivas encontrado a partir do índice 22.
+        // Exemplo:
+        //   ...;1;0068;;0003800F;13.29;4.0;;10;5916;5916;43  (33 campos → bat_main índice 26)
+        for (var i = 22; i < fields.Length; i++)
+        {
+            var candidate = GetOptionalField(fields, i);
+            if (!IsVoltageValue(candidate))
+                continue;
+            var nextField = GetOptionalField(fields, i + 1);
+            return (candidate, IsVoltageValue(nextField) ? nextField : string.Empty);
+        }
+
+        return (string.Empty, string.Empty);
     }
 
     /// <summary>
