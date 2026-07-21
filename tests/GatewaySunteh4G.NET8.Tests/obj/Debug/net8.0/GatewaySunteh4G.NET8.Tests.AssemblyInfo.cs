@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GatewaySunteh4G.NET8.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc9875d3d608232745cc48ce346f6d86ac926632")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+44c5dcbafd47201ad0cb7b86d81fa74fded15f6c")]
 [assembly: System.Reflection.AssemblyProductAttribute("GatewaySunteh4G.NET8.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GatewaySunteh4G.NET8.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

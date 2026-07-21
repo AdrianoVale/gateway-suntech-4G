@@ -185,6 +185,42 @@ public sealed class St4315PacketProcessorTests
     }
 
     [Fact]
+    public async Task ProcessAsync_AltPacket_Extended31Fields_ShouldParseBatteryAtIndex24And25()
+    {
+        // Pacote ALT estendido com 31 campos onde bat_main está no índice 24 e bat_back no índice 25,
+        // seguidos de campos adicionais sem hex_footer fixo no fim.
+        // Formato: ...;9;1;;13.97;4.2;;10;172315;0;470
+        var metrics = new FakeGatewayMetrics();
+        var deviceRegistry = new DeviceRegistry();
+        var commandRegistry = new CommandRegistry();
+        var persistence = new FakePositionPersistenceService();
+        var dispatcher = new FakeCommandDispatcher();
+
+        var processor = BuildProcessor(metrics, deviceRegistry, commandRegistry, persistence, dispatcher);
+
+        var alt = "ALT;2290032090;3FFFFF;229;1.0.13;1;20260721;20:31:58;0913660D;724;2;98C9;56;-0.833722;-46.602755;0.00;0.00;21;1;00000000;00000000;9;1;;13.97;4.2;;10;172315;0;470";
+        var envelope = new UdpEnvelope(
+            Encoding.ASCII.GetBytes(alt),
+            new IPEndPoint(IPAddress.Parse("10.0.0.1"), 9999),
+            DateTimeOffset.UtcNow);
+
+        await processor.ProcessAsync(envelope, CancellationToken.None);
+
+        Assert.True(deviceRegistry.TryGet("2290032090", out var session));
+        Assert.NotNull(session);
+        Assert.Equal("ALT", session.Header);
+
+        var position = Assert.Single(persistence.PersistedPositions);
+        Assert.Equal("2290032090", position.DeviceId);
+        Assert.Equal(-0.833722, position.Latitude, 6);
+        Assert.Equal(-46.602755, position.Longitude, 6);
+        Assert.Equal(13.97, position.BatMain, 6);
+        Assert.Equal(4.2, position.BatBack, 6);
+        Assert.Equal(1, metrics.MessagesDecoded);
+        Assert.Equal(0, metrics.DecodeErrors);
+    }
+
+    [Fact]
     public async Task ProcessAsync_SttPacket_Extended33Fields_ShouldParseBatteryAtIndex26And27()
     {
         // Pacote STT estendido com 33 campos onde bat_main está no índice 26 e bat_back no índice 27,
