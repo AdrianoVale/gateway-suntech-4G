@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\GatewaySunteh4G-NET8.props" />
-</Project>
