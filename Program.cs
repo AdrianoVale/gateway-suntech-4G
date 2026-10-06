@@ -70,6 +70,22 @@ builder.Services.AddKeyedSingleton<ICommandDispatcher>("postgres", (sp, _) =>
         postgresDataService: null));
 builder.Services.AddSingleton<IGatewayPacketProcessor, St4315PacketProcessor>();
 
+// ── Central de Notificações: publicação de eventos no Redis (aditivo, por flag) ──
+var notifEnabled = builder.Configuration.GetValue<bool>("Gateway:Notifications:Enabled");
+if (notifEnabled)
+{
+    var redisConn = builder.Configuration["Gateway:Notifications:Redis"] ?? "127.0.0.1:6379";
+    var redisOpts = StackExchange.Redis.ConfigurationOptions.Parse(redisConn);
+    redisOpts.AbortOnConnectFail = false; // não derruba o startup se o Redis estiver fora
+    builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(
+        _ => StackExchange.Redis.ConnectionMultiplexer.Connect(redisOpts));
+    builder.Services.AddSingleton<INotifEventPublisher, RedisNotifEventPublisher>();
+}
+else
+{
+    builder.Services.AddSingleton<INotifEventPublisher, NullNotifEventPublisher>();
+}
+
 // ── SignalR Hub + JWT (ativados apenas quando Hub.Enabled = true) ───────────
 var hubEnabled = builder.Configuration.GetValue<bool>("Gateway:Hub:Enabled");
 if (hubEnabled)

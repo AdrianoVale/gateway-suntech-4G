@@ -20,6 +20,7 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
     private readonly IPositionPersistenceService _positionPersistenceService;
     private readonly ICommandDispatcher _commandDispatcher;
     private readonly IPositionHubPublisher _hubPublisher;
+    private readonly INotifEventPublisher _notifPublisher;
 
     public St4315PacketProcessor(
         ILogger<St4315PacketProcessor> logger,
@@ -28,7 +29,8 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
         ICommandRegistry commandRegistry,
         IPositionPersistenceService positionPersistenceService,
         ICommandDispatcher commandDispatcher,
-        IPositionHubPublisher hubPublisher)
+        IPositionHubPublisher hubPublisher,
+        INotifEventPublisher notifPublisher)
     {
         _logger = logger;
         _metrics = metrics;
@@ -37,6 +39,7 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
         _positionPersistenceService = positionPersistenceService;
         _commandDispatcher = commandDispatcher;
         _hubPublisher = hubPublisher;
+        _notifPublisher = notifPublisher;
     }
 
     public Task ProcessAsync(UdpEnvelope envelope, CancellationToken cancellationToken)
@@ -197,6 +200,8 @@ public sealed class St4315PacketProcessor : IGatewayPacketProcessor
             _positionPersistenceService.PersistOrCache(positionRecord);
             // Fire-and-forget: falha no Hub não bloqueia o fluxo principal
             _ = _hubPublisher.PublishAsync(deviceId, positionRecord);
+            // Fire-and-forget: eventos de alerta (pânico/bateria/etc.) p/ a Central de Notificações
+            _notifPublisher.PublishDeviceEvent(deviceId, positionRecord.MsgTypeId);
             _metrics.SetDevicesConnected(_deviceRegistry.Count);
             _metrics.SetCommandsPending(_commandRegistry.Count);
             _positionPersistenceService.PendingCacheCount();
