@@ -16,7 +16,7 @@ public sealed class RedisNotifEventPublisher : INotifEventPublisher
     // Catálogo semântico em blt/docs/CENTRAL_NOTIFICACOES.md (seção 3).
     private static readonly HashSet<int> RelevantTypes = new()
     {
-        2001, 2002, 2003, 4013, 4014, 4040, 4041, 4044, 4045
+        2001, 2002, 2003, 4013, 4014, 4033, 4034, 4040, 4041, 4044, 4045
     };
 
     private const string Channel = "blt:notif:events";
